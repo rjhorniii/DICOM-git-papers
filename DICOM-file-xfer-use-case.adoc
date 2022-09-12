@@ -1,0 +1,156 @@
+== For WG-29
+
+From RJ Horn.
+
+I realize that I say a lot of things in this that indicate a preference to use ```git```.  Perhaps some working group like WG-14 should be a guinea pig for doing this.  I know that two WG-14 and WG-06 members are familiar with ```git```, and there may be others.
+
+== Use Cases
+
+* Primary - Develop, Use, and Document DICOM (Retrieve)
+* Secondary - Develop, Use, and Document DICOM (Update)
+* Secondary - test and evaluation of DICOM and implementations
+* Secondary - image libraries
+
+== Priorities
+
+My time is my number one priority.
+
+Computer usage, disk usage, and network usage are secondary. They become a problem primarily when they affect my time or interfere with my work. My networks are a mix of 4G (LTE) wireless (5-10 Mbit/sec typical), WiFi, and medium speed fiber (25-50 Mbit/sec typical). 
+
+The working storage for my
+standards activity is about 100 Gbytes of SSD storage.
+
+Connectivity is variable.  The system should be usable for most purposes even when a network is not available, e.g., when in a cafe or traveling.  This means that direct shared use of network files is not useful.  I need to be able to operate on local copies.
+
+
+== Primary Use Case
+
+=== Most common networking task (90+%) - Mirror a file tree
+
+At present, using ftp, I can mirror a directory tree such as ```WG-06/2022``` by typing the command:
+----
+lftp -f wg6-mirror
+----
+The ```lftp``` takes commands from a file. The ```wg6-mirror``` file contains the commands to log in, change directories, and run the mirror command in ```lftp```. ```mirror``` will copy files from the ftp server, create directories, and set attributes to match those on the ftp server. The time that it takes is limited mostly by the speed of the ftp server, combined with the size of the changes.
+
+From my perspective
+
+* it takes 1 second to type the command
+* I can do something else while it works.  (It sometimes takes more than 15 seconds.)
+
+So the current system using FTP consumes 1 second of my time to update my mirror tree with all
+the changes that have been put upstream.
+
+(In contrast, copying down files that have been uploaded and changed on the HL7 Confluence
+system takes 5-10 seconds of my time per file. I have to search pages to find the uploaded files, decide what’s new,
+select the files one by one, and manually copy them down. A typical situation has 5-10 files updated,
+which makes Confluence 100 times slower than FTP in terms of my time. Confluence is also highly
+manual and error prone. I sometimes don't notice changes.)
+
+NOTE: The ```git``` system is also capable of doing this kind of mirroring task, and has other useful capabilities beyond simple mirroring. I use ```git``` for several open source activities. One danger with ```git``` is the temptation to introduce dependencies on proprietary extensions from Github or other vendors. These introduce lots of problems for people like me who work on a variety of different independent projects.
+
+=== Local File operations (naming, templates, and other governance)
+
+==== Find agendas, minutes, etc
+
+The rigid file naming conventions used in DICOM development let me use commands like
+----
+find wg06/2022 -name "*Agn*"
+----
+to get a list of all the agendas in 2022.
+
+* If I’m looking for a particular one, I’ll probably cut and paste the name to open it.
+* I may take the list, perhaps edit it, and type ```winword.exe -f <list>```. That will open them all in Word.
+* I may just look at the list to see what’s already there and what’s missing.
+
+The file naming for minutes, supplements, and CPs enables a variety of similar administrative tasks, and uses commands that are very fast. The find command for a single working group typically takes milliseconds to complete.
+
+==== Look at document histories
+I might search the entire history of a working group for a Supplement or CP, e.g. ```find wg06 -name "supxxx*"``` or ```find wg06 -name "cpXYZ*"```. The use of dates for directory names makes this history capability more useful.
+
+=== Releases of the standard (special case)
+
+I manually download the zip and tgz files from the web server . Usually I just take the PDF, DocBook, and tools files. The HTML, CHTML, Word, and ODT are too clunky to be useful for me as local files. 
+
+=== Taking extracts for CPs or documentation 
+
+I use my PDF tools to perform things like full text searches. Find all occurrences of (0010,0040) is one such search. Then if I am preparing a CP or documentation, I will usually cut and
+paste from the PDF. Sometimes it’s better to cut and paste from the CHTML version on the server.
+
+PDF and CHTML have different problems with cut and paste so my choice depends on my specific needs.
+http://url[text]
+
+=== Finding links to use in documentation, chat, etc.
+
+I find the CHTML version on the web server the best way to get links to sections, tables, etc. I browse to what I want and copy the link using a browser. This ensures that I use a link that will work and be accessible to the public.
+
+=== Large files
+
+Large files are a problem for mirroring performance. When big files are mixed in with other working group files the performance impact on transfers and "is it new?" comparisons can be substantial. ```lftp``` can be given directory exclusion rules so that specifically named directories, e.g., "images", are skipped. ```git``` has some large file extensions, but in general it behaves badly on large files.
+
+I’ve had problems when some MP4 files and images were included into meeting directories as a replacement for minutes. The images were much less of a problem because they were in separate
+directories and I could tell ```lftp``` to ignore those directories.
+
+A separate directory tree with rules and structures designed for large files is a preferable solution for large files.
+
+=== Experience with GIT
+I work on several open projects that make use of ```git```. It is important to understand that ```git``` is not
+the same as Github. ```git``` is a communications and command set standard. Github is a commercial
+service offering that includes ```git``` compatibility along with proprietary features.  The projects that I work with use Github, Gitlab, and several other services.
+
+I use ```git``` for mirroring file trees in much the same way as FTP. ```git``` is  more efficient and
+usually much faster. In addition, ```git``` will
+
+* preserve file history
+* preserve change history
+* preserve change history within files if the format is line oriented text.
+* support a robust change management process
+
+==== Git has some limitations
+
+* ```git``` cannot mirror sub-trees. The entire repository is always mirrored. This means that some thought must be put into choosing appropriate levels of repository. One repository per working group is a good first guess for DICOM.
+* ```git``` does *badly* on large files, and *very badly* on large binary files. People do use ```git``` as a distribution mechanism for large binary files like executables, but they must be careful with naming and directory structure to avoid triggering ```git```’s problem areas.  Often ```git``` extensions are required.
+
+    Github recommends that repositories be under 1GB for best performance, and starts placing limits on repository size at 10GB.  Individual files above 50MB generate warnings and may be limited.  Individual files above 100MB are not generally permitted.  (There are some specialized large file extensions available.)
+
+For comparison, all the working group directories on FTP are under 2GB in size except for WG06.  WG06 is about 8GB.  This 8GB is for over 20 years of history of DICOM changes, supplements, and versions.
+
+Rules and governance about file names, directory structures, etc. remain just as important with ```git```
+as with FTP.
+
+I consider ```git``` to be superior to FTP for my primary use case because it either provides the same
+capabilities as FTP or it provides better capabilities. The change management can be very valuable,
+although Word and DocBook pose a problem because they are not a line-oriented text format.
+
+== Experience with Confluence
+
+My experience with Confluence is that it is unusable for any serious large shared document development with many participants.  The HL7 Gender Harmony group uses it for agendas, minutes, and shared files.  I can best summarize my experience with it as "highly traumatic and disfunctional".
+
+NOTE: In one case two of us found it easier to set up a quick ```git``` repository to do some shared work rather than struggle with Confluence.  We did the work in ```git``` and then delivered the finished result to the Confluence users.  The combination of ```git``` with the various flavors of markdown is very effective.  (If markdown had the expressive capabilities of DocBook it would be a great substitute.  But DocBook remains more capable than any of the flavors of markdown.)
+
+
+== Secondary use case (updating documents)
+
+I currently use ```lftp``` manually to add selected files to the directory tree.  Adding new files is preferable to replacing old files based on my horrific experiences with MS-word change tracking and MS-word file comparisons.  
+This same approach could be used for ```git```.  It bypasses the *very poor performance* of ```git``` when comparing and creating deltas on quasi-binary files like Word documents.  (There may be some proprietary or experimental extensions that handle Word documents better.  I would not depend on them given that the experts at Microsoft have not created a good MS-word file comparison tool.)
+
+Changing the file format used is a huge step and should not be combined with changes to file sharing.
+
+=== Security and related admin
+
+The present semi-public password approach for FTP has not yet been a problem.  Several people, including me, maintain occasional full directory tree backups so we would be able to recover from massive destruction like a ransomware attack.  But, it will eventually be a problem.
+
+If we used ```git``` we would have to decide on a governance structure for updates.  There are at least 5 different approaches that are widely used and documented for shared development of software and documents.  We would have to consider using one of those approaches, or using a variation on one of those approaches.
+
+== Secondary use case (Test and evaluation)
+
+Most of the testing and evaluation work that I've seen has involved a mixture of large files and small files.  This poses very different problems and uses from the development of DICOM, my primary use case.
+
+These activities are infrequent for me, and generally only need to be used once or twice for a project. This makes it much
+easier to tolerate odd web, ftp, etc. uses. 
+
+== Secondary use case (Image libraries)
+
+This is again very different than the other use cases, and likely needs a different solution.
+DICOM folks like Larry Tarbox have much more experience with these on a regular basis.
+
