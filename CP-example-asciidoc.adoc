@@ -1,0 +1,75 @@
+== a test
+
+This is an example of including a diagram
+
+[plantuml,,png]
+--
+@startjson
+#highlight "event" / "traceID"
+#highlight "event" / "parentID"
+#highlight "event" / "childID"
+{
+"event" : {
+	   "eventID": "1234",
+	   "EventActionCode": "C",
+	   "EventDateTime" : "date-time",
+	   "EventOutcomeIndicator": "0",
+	   "EventTypeCode" : [
+	   	{ "CodedValueType" : "(124, DCM, Do Something Intelligent)"}
+		],
+	   "traceID" : "asdf",
+	   "parentID" : "lkjl",
+	   "childID" : "huh" 
+	   },
+	"ActiveParticipant" : [],
+	"ActiveParticipant" : [],
+	"OtherStuff" : []
+	}
+@endjson
+
+--
+
+And another example
+[plantuml,,png]
+--
+@startjson
+#highlight "event" / "EventTypeCode" / "0" / "code"
+#highlight "ActiveParticipant" / "RoleIDCode" / "0" / "code"
+#highlight "ActiveParticipant" / "RoleIDCode" / "1" / "code"
+{
+	"event": {
+	   "eventID": "1234",
+	   "EventActionCode": "C",
+	   "EventDateTime" : "date-time",
+	   "EventOutcomeIndicator": "0",
+	   "EventTypeCode" : [
+	   	{ "code" : "(TBD-3, IHE-SOLE, Do Something Intelligent)"}
+		],
+	   "traceID" : "asdf",
+	   "parentID" : "lkjl",
+	   "childID" : "huh"
+	   },
+	"ActiveParticipant" : {
+	   "UserID" : "thisuser",
+	   "AlternativeUserID" : "theotherID",
+	   "Username" : "if known",
+	   "UserIsRequestor" : "TRUE",
+	   "RoleIDCode" : [
+	   	{ "code" : "(110152, DCM, Destination Role ID)"},
+	   	{ "code" : "(TBD-1, IHE-SOLE, Dumb One)"}
+		]
+	   },
+	"ActiveParticipant" : {
+	   "UserID" : "thatuser",
+	   "AlternativeUserID" : "anotherID",
+	   "Username" : "if known",
+	   "UserIsRequestor" : "FALSE",
+	   "RoleIDCode" : [
+	   	{ "code" : "(110153, DCM, Source Role ID)"},
+	   	{ "code" : "(TBD-2, IHE-SOLE, Smart One)"}
+		]	   
+	   },
+	"OtherStuff" : []
+}
+@endjson
+--
