@@ -111,7 +111,7 @@ usually much faster. In addition, ```git``` will
 * ```git``` cannot mirror sub-trees. The entire repository is always mirrored. This means that some thought must be put into choosing appropriate levels of repository. One repository per working group is a good first guess for DICOM.
 * ```git``` does *badly* on large files, and *very badly* on large binary files. People do use ```git``` as a distribution mechanism for large binary files like executables, but they must be careful with naming and directory structure to avoid triggering ```git```’s problem areas.  Often ```git``` extensions are required.
 
-    Github recommends that repositories be under 1GB for best performance, and starts placing limits on repository size at 10GB.  Individual files above 50MB generate warnings and may be limited.  Individual files above 100MB are not generally permitted.  (There are some specialized large file extensions available.)
+Github recommends that repositories be under 1GB for best performance, and starts placing limits on repository size at 10GB.  Individual files above 50MB generate warnings and may be limited.  Individual files above 100MB are not generally permitted.  (There are some specialized large file extensions available.)
 
 For comparison, all the working group directories on FTP are under 2GB in size except for WG06.  WG06 is about 8GB.  This 8GB is for over 20 years of history of DICOM changes, supplements, and versions.
 
